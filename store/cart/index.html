@@ -53,147 +53,52 @@
         addEventListener('load', function () {
 
             let products1 = [];
-            userData1 = {
-                id: "2",
-                name: "kareem",
-                email: "kareem@gmail.com",
-                role: "user",
-            };
-            usersList = [
-                {
-                    id: "1",
-                    name: "test",
-                    email: "test@gmail.com",
-                    password: "123456",
-                    role: "user", // user,seller
-                },
-            ];
-            cartList = [
-                {
-                    id: "1", // id of the cart item
-                    cartOwner: "1", // id of user
-                    totalCartPrice: 0, // 30742 EGP
-                    products: [],
-                },
-                //start of object = (user card)
-                {
-                    id: "2", // id of the cart item = (ProductID)
-                    cartOwner: "2", // id of user
-                    totalCartPrice: 300, // 300 EGP
-                    products: [
-                        //start of cap1
-                        {
-                            count: 1,
-                            product: {
-                                id: "1",
-                                images: ["pic/198982_1665262072.webp", "pic/198982_1665262072.webp", "pic/198982_1665262072.webp", "pic/198982_1665262072.webp"],
-                                name: "cap",
-                                description: "test description test description test description",
-                                price: 50, // 200 EGP
-                                discount: 10, // 10%
-                                quantity: 10,
-                                category: {
-                                    id: "6439d2d167d9aa4ca970649f",
-                                    name: "Electronics",
-                                },
-                                seller: {
-                                    id: "1",
-                                    name: "km store",
-                                },
-                                rating: 4.8,
-                            },
-                            totalPrice: 50, // product price (200) * count (2) = 400
-                        },
-                        // start of cap2
-                        {
-                            count: 1,
-                            product: {
-                                id: "2",
-                                images: ["pic/free-latest-ny-baseball-cap-highever-original-imagnm8yxxvmhmdy.webp", "pic/free-latest-ny-baseball-cap-highever-original-imagnm8yxxvmhmdy.webp", "pic/free-latest-ny-baseball-cap-highever-original-imagnm8yxxvmhmdy.webp", "pic/free-latest-ny-baseball-cap-highever-original-imagnm8yxxvmhmdy.webp"],
-                                name: "cap2",
-                                description: "test description test description test description",
-                                price: 100, // 200 EGP
-                                discount: 10, // 10%
-                                quantity: 25,
-                                category: {
-                                    id: "6439d2d167d9aa4ca970649f",
-                                    name: "Electronics",
-                                },
-                                seller: {
-                                    id: "1",
-                                    name: "km store",
-                                },
-                                rating: 4.8,
-                            },
-                            totalPrice: 100, // product price (200) * count (2) = 400
-                        },
-                        // start of cap3
-                        {
-                            count: 1,
-                            product: {
-                                id: "3",
-                                images: ["pic/hats-caps-printing.jpg", "pic/hats-caps-printing.jpg", "pic/hats-caps-printing.jpg", "pic/hats-caps-printing.jpg"],
-                                name: "cap3",
-                                description: "test description test description test description",
-                                price: 150, // 200 EGP
-                                discount: 10, // 10%
-                                quantity: 20,
-                                category: {
-                                    id: "6439d2d167d9aa4ca970649f",
-                                    name: "Electronics",
-                                },
-                                seller: {
-                                    id: "1",
-                                    name: "km store",
-                                },
-                                rating: 4.8,
-                            },
-                            totalPrice: 150, // product price (200) * count (2) = 400
-                        },
-                    ],
-                },
-                //end of user card
-            ];
-            localStorage.setItem("usersList",JSON.stringify(usersList));
-            localStorage.setItem("cartList", JSON.stringify(cartList));
-            localStorage.setItem("userData", JSON.stringify(userData1));
+
+            var usersList = JSON.parse(localStorage.getItem("usersList")) || [];
+            var cartList = JSON.parse(localStorage.getItem("cartList")) || [];
+            var productsList = JSON.parse(localStorage.getItem("productsList")) || [];
             var userData = JSON.parse(localStorage.getItem("userData"));
-
-            // document.addEventListener("DOMContentLoaded", () => {
-                usersList = JSON.parse(localStorage.getItem("usersList")) || [];
-                if (!userData ) {
-                    let section = document.getElementsByTagName("section")[1];
+                
+            if (!userData || !usersList.some((user) => user.id == userData?.id )) {
+                let section = document.getElementsByTagName("section")[1];
                 section.style.display = "none";
-                let section1 = document.getElementById("sec1");
+                let section1 = document.getElementById("authError");
                 section1.style.display = "block";
-                alert("Auth error");
-                    localStorage.removeItem("userData");
-                    return;
-                }
-            // });
+                return;
+            }
 
-            userCard = cartList.find((el) => el.cartOwner == userData.id);
+            var userCard = cartList.find((el) => el.cartOwner == userData.id);
             if (!userCard) {
-                console.error("User not found");
+                
                 let section = document.getElementsByTagName("section")[1];
                 section.style.display = "none";
                 let section1 = document.getElementById("sec1");
                 section1.style.display = "block";
 
             } else {
+
+                const existingProducts = userCard.products.filter(cartProduct =>
+                    productsList.some(product => product.id === cartProduct.product.id)
+                );
+                userCard.products = existingProducts;
+                localStorage.setItem("cartList", JSON.stringify(cartList));
                 
                 userCard.products.map(ele => {
-                    obj = {
-                        id: 0,
-                        img: "",
-                        name: "",
-                        price: 0
-                    };
-                    obj.id = ele.product.id;
-                    obj.img = ele.product.images[0];
-                    obj.name = ele.product.name;
-                    obj.price = ele.product.price;
-                    products1.push(obj);
+                    if(productsList.some((p) => p.id == ele.product.id )){
+                        obj = {
+                            id: 0,
+                            img: "",
+                            name: "",
+                            price: 0
+                        };
+                        obj.id = ele.product.id;
+                        obj.img = ele.product.images[0];
+                        obj.name = ele.product.name;
+                        obj.price = ele.product.discount > 0 
+                        ? Math.floor(Number(ele.product.price) - (Number(ele.product.price) * Number(ele.product.discount) / 100)) 
+                        : Number(ele.product.price);
+                        products1.push(obj);
+                    }
                 });
                 if (products1.length != 0) {
                     localStorage.setItem("products", JSON.stringify(products1));
@@ -223,7 +128,7 @@
                             } else if (i == 1) {
                                 var creatimg = document.createElement('img');
                                 creatimg.src = values[i];
-                                creatimg.className = "img";
+                                creatimg.className = "img img-fluid";
                                 creattdimg = document.createElement("td");
                                 creattdimg.appendChild(creatimg);
                                 creat_tr.appendChild(creattdimg);
@@ -255,17 +160,23 @@
                         tbody.appendChild(creat_tr);
 
                         createdinc.addEventListener("click", function () {
-                            incnum = this.nextSibling.innerHTML;
-                            userCard.products.map(ele => {
-                                if (ele.product.id == this.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerHTML) {
-                                    qu = ele.product.quantity;
+                            var products = JSON.parse(localStorage.getItem("productsList")) || [];
+                            incnum = Number(this.nextSibling.innerHTML);
+                            products.map(ele => {
+                                if (ele.id == this.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerHTML) {
+                                    qu = ele.quantity;
                                 }
                             });
-                            if (incnum >= qu) {
-                                num.innerHTML = `${qu}`;
+                            if (incnum >= Number(qu)) {
+                                qu = qu ? qu : 1
+                                num.innerHTML = `${qu ? qu : 1 }`;
                             } else {
                                 inc = parseInt(incnum) + 1
                                 num.innerHTML = `${inc}`;
+                            }
+
+                            if(incnum == Number(qu)){
+                                return;
                             }
 
                             incprice = parseInt(this.parentElement.previousSibling.innerHTML);
@@ -280,6 +191,8 @@
                                 if (elem.product.id == this.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerHTML) {
                                     elem.count = parseInt(num.innerHTML);
                                     elem.totalPrice = elem.product.price * elem.count;
+                                    
+
                                 }
                             });
                             userCard.totalCartPrice = allprice;
@@ -324,6 +237,8 @@
 
 
                         }) //end of -
+                        
+                        
                         del.addEventListener("click", function () {
                             var vali = confirm("are you sure??");
                             if (vali) {
@@ -444,12 +359,25 @@
         </div>
     </header>
 
-    <section id="sec1" style="display: none; text-align: center;">
 
-        <img src="pic/empty.png" alt="">
+    <div class="pb-5 px-4" id="authError" style="display: none; text-align: center;">
+        
+        <div class="text-center mb-4">
+            <img  src="pic/empty-cart.svg" alt="" height="250">
+        </div>
+        <h3 class="text-secondary mb-4">You Should login first to add and assess cart</h3>
+        <a href="../sign-in/index.html" class="btn btn-primary text-white btn-lg px-5"> Login </a>
+    
+    </div>
+
+    <section class="pb-5 px-4" id="sec1" style="display: none; text-align: center;">
+
+        <div class="text-center mb-4">
+            <img  src="pic/empty-cart.svg" alt="" height="250">
+        </div>
         <h3 class="text-secondary">Your cart is empty</h3>
-        <p class="text-secondary">looks like you haven't made your choice yet...</p>
-        <a href="#" class="btn btn-success text-white">go shopping</a>
+        <p class="text-secondary  mb-4">looks like you haven't made your choice yet...</p>
+        <a href="../products/product_catalog_screen.html" class="btn btn-primary text-white btn-lg px-5">Go Shopping</a>
     </section>
 
 

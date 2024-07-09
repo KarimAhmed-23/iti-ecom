@@ -134,7 +134,11 @@ const validateInputs = () => {
   if (!quantity.value.trim()) {
     setValidationError(quantity, "Product quantity is required.");
     isValid = false;
+  } else if (quantity.value.trim() <= 0) {
+    setValidationError(quantity, "quantity must 1 at least");
+    isValid = false;
   }
+
   if (category.selectedIndex === 0) {
     setValidationError(category, "Product category is required.");
     isValid = false;
@@ -341,7 +345,7 @@ const handleFileSelect = (event) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const categoriesSelect = document.getElementById("product_category");
-  categories.forEach(category => {
+  categories.forEach((category) => {
     const optionElement = document.createElement("option");
     optionElement.value = category.toLowerCase();
     optionElement.textContent = category;

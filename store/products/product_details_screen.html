@@ -52,6 +52,12 @@
         .add-to-cart-button {
             margin-top: 20px;
         }
+
+        .no-product-found img{
+            max-height: 400px;
+            object-fit: contain;
+        }
+
     </style>
 </head>
 <body>
@@ -116,11 +122,12 @@
                     <div class="product-detail-card">
                         <div class="product-info">
                             <p class="product-name">Product Name</p>
+                            <p class="product-seller">Seller : seller name</p>
                             <p class="product-price">$120</p>
                             <p class="product-description">The product description goes here. This text is a placeholder and can be replaced with the actual product description.</p>
                             <p class="product-quantity">Quantity: 50</p>
                             <div class="add-to-cart-button">
-                                <button class="btn btn-primary btn-block">Add to Cart</button>
+                                <button class="btn btn-primary btn-block" id="AddToCardBtn">Add to Cart</button>
                             </div>
                         </div>
                     </div>

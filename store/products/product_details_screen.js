@@ -5,7 +5,9 @@ window.addEventListener("load", function () {
 
 function setupAddToCartButtonListener() {
   const addToCartButton = document.querySelector(".add-to-cart-button button");
-  addToCartButton.addEventListener("click", handleAddToCartButtonClick);
+  if(addToCartButton){
+    addToCartButton.addEventListener("click", handleAddToCartButtonClick);
+  }
 }
 
 function handleAddToCartButtonClick() {
@@ -59,6 +61,8 @@ function handleIfAuthenticatedUser(userId) {
     };
     cartList.push(newCart);
     localStorage.setItem("cartList", JSON.stringify(cartList));
+    decrementAddedProductQuantity(productId);
+    showProductDetails();
     alert("Product added to cart successfully!");
   } else {
     const userCart = cartList[cartIndex];
@@ -85,10 +89,13 @@ function handleIfAuthenticatedUser(userId) {
   }
 }
 function decrementAddedProductQuantity(productId) {
+
+  
   const productsList = JSON.parse(localStorage.getItem("productsList")) ?? [];
   const productIndex = productsList.findIndex(
-    (product) => product.id === productId
+    (product) => product.id == productId
   );
+
 
   if (productIndex !== -1) {
     productsList[productIndex].quantity -= 1;
@@ -116,21 +123,34 @@ function showProductDetails() {
 }
 
 function populateProductDetails(product) {
+  let AddToCardBtn = document.getElementById("AddToCardBtn");
+
   document.querySelector(".product-name").textContent = product.name;
+  document.querySelector(".product-seller").textContent = `Seller : ${product.seller.name === "admin" ? "Our E-Com" : product.seller.name}`;
   document.querySelector(".product-price").innerHTML =
     product.discount > 0
       ? `<span class="original-price">${
           product.price
-        } EGP</span> <span class="discounted-price">${(
+        } EGP</span> <span class="discounted-price">${Math.floor(
           product.price -
           (product.price * product.discount) / 100
-        ).toFixed(2)} EGP</span>`
+        )} EGP</span>`
       : `${product.price} EGP`;
   document.querySelector(".product-description").textContent =
     product.description;
-  document.querySelector(
-    ".product-quantity"
-  ).textContent = `Quantity: ${product.quantity}`;
+  document.querySelector(".product-quantity").innerHTML = `Quantity: ${
+    product.quantity > 0
+      ? product.quantity
+      : '<b class="text-danger">Sold Out</b>'
+  }`;
+
+  if(product.quantity <= 0){
+    AddToCardBtn.innerHTML = "Sold Out";
+    AddToCardBtn.classList.add("disabled", "btn-secondary");
+    AddToCardBtn.style.pointerEvents = "none";
+  }
+
+
 }
 
 function populateCarousel(images) {
