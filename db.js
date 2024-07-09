@@ -139,3 +139,17 @@ messagesList=[
   }
 ]
 
+// categories array
+const categories = [
+  "Electronics",
+  "Clothing",
+  "Home",
+  "Books",
+  "Health",
+  "Games",
+  "Sports",
+  "Automotive",
+  "Watches",
+  "Food",
+];
+
