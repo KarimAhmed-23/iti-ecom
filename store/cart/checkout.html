@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>checkout</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .container {
+            overflow: hidden;
+            text-align: justify;
+            border-radius: 10%;
+        }
+
+        .second {
+            float: right;
+        }
+        .img{
+            width: 5vw;height: 10vh;
+        }
+        
+    </style>
+    <script>
+        addEventListener('load', function () {
+            cartList = JSON.parse(localStorage.getItem("cartList"));
+            userData = JSON.parse(localStorage.getItem("userData"));
+            userCard = cartList.find((el) => el.cartOwner == userData.id);
+            objusercard = cartList.filter((el) => el.cartOwner == userData.id);
+            _TotalOrderPrice = userCard.totalCartPrice;
+            const date = new Date();
+            let radios = document.querySelectorAll('input[type="radio"]');
+            let total = document.getElementById("total");
+            total.innerHTML = `${_TotalOrderPrice} EGP`;
+            let divproduct=document.getElementById("productsh");
+            btn2 = document.getElementById("choosecard");
+            saveorder = document.getElementById("save");
+
+            saveorder.addEventListener('click', function (e) {
+                (() => {
+                    'use strict'
+
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    const forms = document.querySelectorAll('.needs-validation')
+
+                    // Loop over them and prevent submission
+                    Array.from(forms).forEach(form => {
+                        form.addEventListener('click', event => {
+                            if (!form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            } 
+
+                            form.classList.add('was-validated')
+                        }, false)
+                    })
+                })();
+                Name = document.getElementById("validationCustom01");
+                let Nameval = Name.value;
+                phone = document.getElementById("validationCustom02");
+                let phoneval = phone.value;
+                city = document.getElementById("validationCustom03");
+                let cityval = city.value;
+                address = document.getElementById("validationCustom04");
+                let addressval = address.value;
+                for (let radio of radios) {
+                    if (!radio.checked || Nameval.trim().length == 0 || cityval.trim().length == 0 || phoneval.trim().length == 0 || addressval.trim().length == 0 ||userCard.products.length == 0) {
+                        e.preventDefault();
+                        // alert("enter your data");
+                    } else {
+                        const uid = generateUID();
+                        ordersList = [
+                            {
+                                id: uid, //uuid
+                                // id: ordersList.length
+                                //     ? Math.max(...ordersList.map((p) => parseInt(p.id))) + 1
+                                //     : 1,
+                                orderOwner: userCard.cartOwner, // id of userData
+                                totalOrderPrice: _TotalOrderPrice,
+                                paymentMethodType: radio.value,
+                                orderStatus: "processing",
+                                billDetails: {
+                                    name: Nameval,
+                                    phone: phoneval,
+                                    city: cityval,
+                                    address: addressval,
+                                },
+                                createdAt: date,
+                                products: userCard.products,
+
+                            },
+                        ];
+                        localStorage.removeItem("ordersList");
+                        localStorage.setItem("ordersList", JSON.stringify(ordersList));
+                        cartList[userData.id - 1].products = [];
+                        cartList[userData.id - 1].totalCartPrice = 0;
+                        localStorage.removeItem("cartList");
+                        localStorage.setItem("cartList", JSON.stringify(cartList));
+                        alert("your order done");
+                    }
+                };
+            });
+            userCard.products.map(obj =>{
+                let divcreate =document.createElement("div");
+                divcreate.classList.add("container","bg-light","m-1","p-2");
+                let img =document.createElement("img");
+                img.src=`pic/4863042.webp`;
+                img.style.width="3vw";
+                img.style.height="5vh";
+                let sp1 =document.createElement("span");
+                
+                let sp2 =document.createElement("span");
+                let sp3 =document.createElement("span");
+                sp3.classList.add("ms-2","text-danger")
+                sp2.classList.add("second","text-danger");
+                let pname =obj.product.name;
+                let pcount =obj.count;
+                let ptotalprice =obj.totalPrice;
+                sp1.innerHTML=`${pname}`;
+                sp3.innerHTML=`x${pcount}`;
+                sp2.innerHTML=`${ptotalprice}`;
+                divcreate.append(img,sp1,sp3,sp2);
+                divproduct.appendChild(divcreate);
+            })
+
+        }); //end of load
+        function generateUID() {
+    return Date.now().toString(20) + Math.random().toString(20).substr(2, 5);
+};
+    </script>
+</head>
+
+<body>
+    <h3 class="text-danger m-3 ">click Shoping</h3>
+    <div class="container-fluid">
+        <div class="row">
+        <div class="col-sm-8 col-12">
+            <div class=" m-4 bg-light">
+                <form class="row g-3 needs-validation col-12" novalidate>
+                    <div class="col-12">
+                        <label for="validationCustom01" class="form-label ms-1">Name</label>
+                        <input type="text" class="form-control" id="validationCustom01" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="validationCustom05" class="form-label ms-1">phone</label>
+                        <input type="text" class="form-control" id="validationCustom02" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid phone.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="validationCustom03" class="form-label ms-1">City</label>
+                        <input type="text" class="form-control" id="validationCustom03" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid city.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="validationCustom03" class="form-label ms-1">Address</label>
+                        <input type="text" class="form-control" id="validationCustom04" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid address.
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-4 col-12">
+            <div class="card mt-2">
+                <div class="bg-light"
+                    style="background-color: var(--main-color-hover); text-align: center; font-size: 2rem;">
+                    Order Summary
+                </div>
+                <div class="card-body bg-white">
+                    <h5 class="card-title "id="productsh">Products :
+                    </h5>
+                </div>
+                </h5>
+                <h2 style="background-color:var(--main-color); width:10rem ;margin: 0 auto;text-align: center;">
+                    Total :<div class="container text-danger text-center fw-bolde bg-light mt-2 mb-2" id="total">
+                    </div>
+                </h2>
+                <div class="card-footer bg-white" style="text-align: center;">
+                    <a href="#" class="btn btn-danger fs-3" id="save">Order Now</a>
+                </div>
+            </div>
+        </div>
+    </div> <!--check out-->
+
+
+
+    <h3 class="text-danger  m-3">Payment Method</h3>
+    <div class="row m-3 bg-light p-3" style="width: 60vw;">
+        <div class="form-check col-lg-6 col-12">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="choosecard" value="cridet-card">
+            <label class="form-check-label" for="flexRadioDefault1">
+                credit card
+            </label>
+            <img src="pic/6963703.png" class="img">
+        </div>
+        <div class="form-check col-lg-6 col-12">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="choosecash" value="cash">
+            <label class="form-check-label" for="flexRadioDefault2">
+                cash on delivery
+            </label>
+            <img src="pic/cash.png" class="img">
+        </div>
+    </div>
+    </div>
+    
+
+
+
+
+    <script src="Js/bootstrap.bundle.js"></script>
+</body>
+
+</html>

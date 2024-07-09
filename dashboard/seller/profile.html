@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="height=device-height, 
+                      width=device-width, initial-scale=1.0, 
+                      minimum-scale=1.0, maximum-scale=1.0, 
+                      user-scalable=no"
+    />
+
+    <title>Seller Dashboard</title>
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../assets/css/bootstrap.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../assets/css/fontAwesome.css"
+    />
+
+    <link rel="stylesheet" type="text/css" href="../assets/css/main.css" />
+  </head>
+
+  <body>
+    <div class="root-wrapper">
+      <aside class="sidebar">
+        <div class="slidebar-content">
+          <a class="logoBox" href="#"> Our E-com</a>
+          <ul class="sidebar-list">
+            <li>
+              <a href="index.html">
+                <i class="fa-solid fa-house"></i>
+                home
+              </a>
+            </li>
+            <li>
+              <a href="products.html">
+                <i class="fa-solid fa-list"></i>
+                products
+              </a>
+            </li>
+            <li>
+              <a href="orders.html">
+                <i class="fa-solid fa-cart-shopping"></i>
+                orders
+              </a>
+            </li>
+            <li>
+              <a href="sales.html">
+                <i class="fa-solid fa-chart-line"></i>
+                sales
+              </a>
+            </li>
+            <li>
+              <a class="active" href="profile.html">
+                <i class="fa-solid fa-user"></i>
+                profile
+              </a>
+            </li>
+          </ul>
+        </div>
+        <a class="logout-link" href="#">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          logout
+        </a>
+        <div class="close-sidebar" id="sidebar-close">
+          <i class="fas fa-times"></i>
+        </div>
+      </aside>
+      <main class="page-wrapper">
+        <nav class="top-nav">
+          <div class="container-fluid w-100 h-100">
+            <div class="nav-content">
+              <div class="nav-menu">
+                <button class="btn open-sidebar" id="sidebar-open">
+                  <i class="fa-solid fa-bars"></i>
+                </button>
+              </div>
+              <div class="nav-actions">
+                <a
+                  class="account-btn"
+                  href="profile.html"
+                  aria-expanded="false"
+                >
+                  <img
+                    src="../assets/img/avatar.png"
+                    class="admin-avatar ml-4"
+                  />
+                  <span class="user-name" id="userName"> </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <section class="section-style profile-section">
+          <div class="container-fluid">
+            <h1 class="main-title">profile</h1>
+            <div class="profile-form">
+              <div class="form-group mb-4">
+                <label class="form-label" for="name">name</label>
+                <input
+                  type="text"
+                  class="form-control input-focus"
+                  placeholder="enter your name"
+                  id="name"
+                />
+              </div>
+              <div class="form-group mb-4">
+                <label class="form-label" for="name">email</label>
+                <input
+                  type="email"
+                  class="form-control input-focus"
+                  placeholder="enter your email"
+                  id="email"
+                />
+              </div>
+              <div class="form-group mb-4">
+                <label class="form-label" for="password">password</label>
+                <div class="password-field">
+                  <input
+                    type="password"
+                    class="form-control input-focus password-input"
+                    placeholder="enter your password"
+                    id="password"
+                  /><span aria-hidden="true" class="eye-icon"></span>
+                </div>
+              </div>
+              <div class="form-group mb-4">
+                <button
+                  type="button"
+                  class="btn btn-primary fs-6 px-5"
+                  onclick="saveProfile()"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- jquery 3.5.1   -->
+    <script src="../assets/js/jquery-3.5.1.min.js"></script>
+
+    <!-- bootstrap v5   -->
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+
+    <!-- main style js   -->
+    <script src="../assets/js/main.js"></script>
+
+     <!-- sellerAuth script   -->
+     <script src="../assets/js/scripts/sellerAuth.js"></script>
+
+
+    <script>
+      const usersList = JSON.parse(localStorage.getItem("usersList")) || [];
+      const userData = JSON.parse(localStorage.getItem("userData")) || {};
+      const currentData = usersList.find((user) => user.id == userData.id);
+
+      window.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("name").value = currentData.name;
+        document.getElementById("email").value = currentData.email;
+        document.getElementById("password").value = currentData.password;
+      });
+
+      const validateInputs = () => {
+        clearValidationErrors();
+        let isValid = true;
+        const name = document.getElementById("name");
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+
+        if (!name.value.trim()) {
+          setValidationError(name, "name is required.");
+          isValid = false;
+        }
+
+        if (!validateEmail(email.value)) {
+          setValidationError(email, "Please enter a valid email.");
+          isValid = false;
+        } else if (emailExists(email.value, userData.id)) {
+          setValidationError(email, "Email already exists.");
+          isValid = false;
+        }
+
+        if (!password.value.trim()) {
+          setValidationError(password, "password is required.");
+          isValid = false;
+        } else if (password.value.length < 6) {
+          setValidationError(
+            password,
+            "Password must be at least 6 characters long."
+          );
+          isValid = false;
+        }
+
+        return isValid;
+      };
+
+      const setValidationError = (element, message) => {
+        element.classList.add("border-danger");
+        const errorDiv = document.createElement("div");
+        errorDiv.classList.add("text-danger");
+        errorDiv.innerText = message;
+        element.parentNode.appendChild(errorDiv);
+      };
+
+      const clearValidationErrors = () => {
+        document
+          .querySelectorAll(".border-danger")
+          .forEach((el) => el.classList.remove("border-danger"));
+        document.querySelectorAll(".text-danger").forEach((el) => el.remove());
+      };
+
+      const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+      };
+
+      const emailExists = (email, currentUserId) => {
+        return usersList.some(
+          (user) => user.email == email && user.id != currentUserId
+        );
+      };
+
+      function saveProfile() {
+        if (!validateInputs()) {
+          return;
+        }
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        userData.name = name;
+        userData.email = email;
+        userData.password = password;
+
+        const userIndex = usersList.findIndex((user) => user.id == userData.id);
+        if (userIndex !== -1) {
+          usersList[userIndex] = { ...userData };
+        }
+        localStorage.setItem("usersList", JSON.stringify(usersList));
+        localStorage.setItem("userData", JSON.stringify(userData));
+
+        alert("Profile updated successfully!");
+        window.scrollTo(0, 0);
+      }
+    
+      
+    </script>
+  </body>
+</html>
