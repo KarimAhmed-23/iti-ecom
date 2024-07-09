@@ -44,7 +44,9 @@ function handleIfAuthenticatedUser(userId) {
 
   if (cartIndex === -1) {
     const newCart = {
-      id: 1, 
+      id: cartList.length
+        ? Math.max(...cartList.map((el) => parseInt(el.id))) + 1
+        : 1,
       cartOwner: userId,
       totalCartPrice: productToAdd.price * 1,
       products: [
@@ -59,7 +61,6 @@ function handleIfAuthenticatedUser(userId) {
     localStorage.setItem("cartList", JSON.stringify(cartList));
     alert("Product added to cart successfully!");
   } else {
-  
     const userCart = cartList[cartIndex];
     const productIndex = userCart.products.findIndex(
       (p) => p.product.id === productId
@@ -74,11 +75,10 @@ function handleIfAuthenticatedUser(userId) {
       userCart.totalCartPrice += productToAdd.price * 1;
       cartList[cartIndex] = userCart;
       localStorage.setItem("cartList", JSON.stringify(cartList));
-    
-      decrementAddedProductQuantity(productId);
-      showProductDetails();  
-      alert("Product added to cart successfully!");
 
+      decrementAddedProductQuantity(productId);
+      showProductDetails();
+      alert("Product added to cart successfully!");
     } else {
       alert("This product is already in your cart.");
     }
@@ -86,7 +86,9 @@ function handleIfAuthenticatedUser(userId) {
 }
 function decrementAddedProductQuantity(productId) {
   const productsList = JSON.parse(localStorage.getItem("productsList")) ?? [];
-  const productIndex = productsList.findIndex((product) => product.id === productId);
+  const productIndex = productsList.findIndex(
+    (product) => product.id === productId
+  );
 
   if (productIndex !== -1) {
     productsList[productIndex].quantity -= 1;
