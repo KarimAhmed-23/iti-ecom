@@ -52,10 +52,10 @@
         .add-to-cart-button {
             margin-top: 20px;
         }
-
         .no-product-found img{
             max-height: 400px;
             object-fit: contain;
+            max-width: 100%;
         }
 
     </style>
@@ -63,7 +63,7 @@
 <body>
 
     <!-- add header -->
-    <header class="bg-light mb-5">
+    <header class="bg-light mb-5 border-bottom">
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light px-lg-0">
                 <a class="navbar-brand" href="../home/index.html">Our E-Com</a>
@@ -96,8 +96,8 @@
         </div>
     </header>
 
-    <div class="product-details-body">
-        <div class="container mt-5">
+    <div class="product-details-body pb-5">
+        <div class="container ">
             <h1 class="text-center mb-4">Product Details</h1>
             <div class="row">
                 <div class="col-md-6">
@@ -135,6 +135,17 @@
             </div>
         </div>
     </div>
+
+    <footer class="bg-light mt-auto border-top">
+        <div class="container text-center  py-3">
+          ©<span>
+            <script>
+              document.write(new Date().getFullYear());
+            </script>
+          </span>
+          Our E-Com All rights reserved
+        </div>
+      </footer>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

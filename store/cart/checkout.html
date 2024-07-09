@@ -26,9 +26,18 @@
     </style>
     <script>
         addEventListener('load', function () {
-            cartList = JSON.parse(localStorage.getItem("cartList"));
-            userData = JSON.parse(localStorage.getItem("userData"));
-            userCard = cartList.find((el) => el.cartOwner == userData.id);
+            var usersList = JSON.parse(localStorage.getItem("usersList")) || [];
+            var cartList = JSON.parse(localStorage.getItem("cartList")) || [];
+            var productsList = JSON.parse(localStorage.getItem("productsList")) || [];
+            var userData = JSON.parse(localStorage.getItem("userData"));
+            var userCard = cartList.find((el) => el.cartOwner == userData.id);
+
+            if (!userData || !usersList.some((user) => user.id == userData?.id ) || !userCard) {
+                window.location.href = "../home/index.html"
+                return;
+            }
+
+            
             objusercard = cartList.filter((el) => el.cartOwner == userData.id);
             _TotalOrderPrice = userCard.totalCartPrice;
             const date = new Date();
@@ -103,6 +112,8 @@
                     }
                 };
             });
+            
+            
             userCard.products.map(obj =>{
                 let divcreate =document.createElement("div");
                 divcreate.classList.add("container","bg-light","m-1","p-2");
@@ -118,7 +129,9 @@
                 sp2.classList.add("second","text-danger");
                 let pname =obj.product.name;
                 let pcount =obj.count;
-                let ptotalprice =obj.totalPrice;
+                let ptotalprice = obj.product.discount > 0 
+                        ? Math.floor(Number(obj.product.price) - (Number(obj.product.price) * Number(obj.product.discount) / 100)) 
+                        : Number(obj.product.price);
                 sp1.innerHTML=`${pname}`;
                 sp3.innerHTML=`x${pcount}`;
                 sp2.innerHTML=`${ptotalprice}`;
@@ -136,7 +149,7 @@
 <body>
 
     <!-- add header -->
-    <header class="bg-light mb-5">
+    <header class="bg-light mb-5 border-bottom">
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light px-lg-0">
                 <a class="navbar-brand" href="../home/index.html">Our E-Com</a>
@@ -169,11 +182,12 @@
         </div>
     </header>
 
-    <h3 class="text-danger m-3 ">click Shoping</h3>
-    <div class="container-fluid mb-5">
+    
+    <div class="container-fluid pb-5">
         <div class="row">
         <div class="col-sm-8 col-12">
-            <div class=" m-4 bg-light">
+            <h3 class="text-danger py-3 ">Bill Details</h3>
+            <div class=" p-4 bg-light">
                 <form class="row g-3 needs-validation col-12" novalidate>
                     <div class="col-12">
                         <label for="validationCustom01" class="form-label ms-1">Name</label>
@@ -252,6 +266,16 @@
     </div>
     </div>
     
+    <footer class="bg-light mt-auto border-top">
+        <div class="container text-center  py-3">
+          ©<span>
+            <script>
+              document.write(new Date().getFullYear());
+            </script>
+          </span>
+          Our E-Com All rights reserved
+        </div>
+      </footer>
 
 
     <script src="Js/bootstrap.bundle.js"></script>

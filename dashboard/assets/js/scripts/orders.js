@@ -48,16 +48,16 @@ const renderTable = () => {
                         <div class="table-actions">
                               <button type="button" class="btn btn-info btn-view" data-id="${
                                 order.id
-                              }" onclick="showOrderDetails(${order.id})">
+                              }" onclick="showOrderDetails('${order.id}')">
                                 <i class="fa-solid fa-eye"></i>
                               </button>
                               ${
                                 order.orderStatus === "processing"
                                   ? `
-                                  <button type="button" class="btn btn-success btn-ship" data-id="${order.id}" onclick="changeOrderStatus(${order.id}, 'shipped')">
+                                  <button type="button" class="btn btn-success btn-ship" data-id="${order.id}" onclick="changeOrderStatus('${order.id}', 'shipped')">
                                     <i class="fa-solid fa-check"></i>
                                   </button>
-                                  <button type="button" class="btn btn-danger btn-cancel" data-id="${order.id}" onclick="changeOrderStatus(${order.id}, 'canceled')">
+                                  <button type="button" class="btn btn-danger btn-cancel" data-id="${order.id}" onclick="changeOrderStatus('${order.id}', 'canceled')">
                                     <i class="fa-solid fa-xmark"></i>
                                   </button>`
                                   : ""
@@ -170,7 +170,7 @@ const showOrderDetails = (id) => {
                   <div class="item-icon"><i class="fa-solid fa-calendar-week"></i></div>
                   <div class="item-texts">
                     <p class="sub-title">Order Date</p>
-                    <p class="title">${order.createdAt}</p>
+                    <p class="title">${order.createdAt.split("T")[0]}</p>
                   </div>
                 </div>
               `;

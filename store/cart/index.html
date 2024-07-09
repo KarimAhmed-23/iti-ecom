@@ -85,18 +85,19 @@
                 
                 userCard.products.map(ele => {
                     if(productsList.some((p) => p.id == ele.product.id )){
+                        const currentProduct = productsList.find(el => el.id == ele.product.id );
                         obj = {
                             id: 0,
                             img: "",
                             name: "",
                             price: 0
                         };
-                        obj.id = ele.product.id;
-                        obj.img = ele.product.images[0];
-                        obj.name = ele.product.name;
-                        obj.price = ele.product.discount > 0 
-                        ? Math.floor(Number(ele.product.price) - (Number(ele.product.price) * Number(ele.product.discount) / 100)) 
-                        : Number(ele.product.price);
+                        obj.id = currentProduct.id;
+                        obj.img = currentProduct.images[0];
+                        obj.name = currentProduct.name;
+                        obj.price = currentProduct.discount > 0 
+                        ? Math.floor(Number(currentProduct.price) - (Number(currentProduct.price) * Number(currentProduct.discount) / 100)) 
+                        : Number(currentProduct.price);
                         products1.push(obj);
                     }
                 });
@@ -117,6 +118,7 @@
                     tbody = document.getElementsByTagName("tbody")[0];
                     creat_tdimg = document.createElement("td");
                     products.forEach(obj => {
+                        const currentQty = userCard.products.find(el => el.product.id == obj.id ).count = 1;
                         var creat_tr = document.createElement("tr");
                         let values = Object.values(obj);
                         for (let i = 0; i < values.length; i++) {
@@ -144,7 +146,7 @@
                         createdinc.setAttribute("class", "fa-solid fa-plus");
                         var num = document.createElement("span");
                         num.setAttribute("class", "m-2");
-                        num.innerHTML = `${x}`;
+                        num.innerHTML = `${currentQty}`;
                         var createddec = document.createElement("i")
                         createddec.setAttribute("class", "fa-solid fa-minus");
                         creat_tdnum.appendChild(createdinc);
@@ -317,6 +319,9 @@
                 //     price: 150
                 // }];
             }; //end of validate user id
+
+        
+          
             
         }); //end of load
     </script>
@@ -326,7 +331,7 @@
    
 
     <!-- add header -->
-    <header class="bg-light mb-5">
+    <header class="bg-light mb-5 border-bottom">
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light px-lg-0">
                 <a class="navbar-brand" href="../home/index.html">Our E-Com</a>
@@ -381,57 +386,76 @@
     </section>
 
 
-    <section class="container-fluid text-center">
+    <section class="container-fluid text-center pb-5">
         <div class="row">
-            <div class="col-sm-8 col-12 table-responsive" >
-                <table class="table" style="width: 60vw;">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th scope="col">Products</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">price</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">delet</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+            <div class="col-sm-8 col-12 " >
+                <div class="table-responsive">
+                    <table class="table" >
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th scope="col">Products</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+               
             </div> <!--your cart-->
 
             
 
-                <div class="card col-sm-4 col-12" >
-                    <div style="background-color: var(--main-color-hover); text-align: center; font-size: 2rem;">
-                        The total price
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title ">Products :</h5>
-                            
-                                <img src="pic/free-product-135-781070.webp" style="width: 22vw;height: 20vh;">
-                            
-                    </div>
-                    
-                    <h2 style="background-color:var(--main-color); width:10rem ;margin: 0 auto;text-align: center;">
-                        Total :<div class="input-group">
-                            <input type="text" class="form-control text-center" id="total" disabled
-                                aria-label="Dollar amount (with dot and two decimal places)">
+                <div class=" col-sm-4 col-12" >
+                    <div class="card">
+                        <div style="background-color: var(--main-color-hover); text-align: center; font-size: 2rem;">
+                            The total price
                         </div>
-                    </h2>
-                    <div class="card-footer mt-2" style="text-align: center;">
-                        <a href="checkout.html" class="btn btn-dark fs-3">Checkout</a>
+                        <div class="card-body text-center">
+                            <h5 class="card-title ">Products :</h5>
+                                
+                                    <img src="pic/free-product-135-781070.webp" height="150">
+                                
+                        </div>
+                        
+                        <h2 style="background-color:var(--main-color); width:10rem ;margin: 0 auto;text-align: center;">
+                            Total :<div class="input-group">
+                                <input type="text" class="form-control text-center" id="total" disabled
+                                    aria-label="Dollar amount (with dot and two decimal places)">
+                            </div>
+                        </h2>
+                        <div class="card-footer mt-2" style="text-align: center;">
+                            <a href="checkout.html" class="btn btn-dark fs-3" >Checkout</a>
+                        </div>
                     </div>
                 </div>
             
         </div> <!--check out-->
         </div>
     </section>
+
+    <footer class="bg-light mt-auto border-top">
+        <div class="container text-center  py-3">
+          ©<span>
+            <script>
+              document.write(new Date().getFullYear());
+            </script>
+          </span>
+          Our E-Com All rights reserved
+        </div>
+      </footer>
+    
     <script src="Js/bootstrap.bundle.js"></script>
 
 
      <!-- add public js -->
      <script src="../../public/js/main.js"></script>
+
+     
 
 
 </body>

@@ -1,18 +1,25 @@
 /*------------- #Navbar Auth   --------------*/
 document.addEventListener("DOMContentLoaded", () => {
+
+  // handle page white space
+  document.body.style.display = "flex";
+  document.body.style.flexDirection = "column";
+  document.body.style.justifyContent = "space-between";
+  document.body.style.alignItems = "stretch";
+  document.body.style.minHeight = "100vh";
+
   const authButton = document.getElementById("authButton");
   const accountButton = document.getElementById("accountButton");
 
   const userData = JSON.parse(localStorage.getItem("userData"));
   const usersList = JSON.parse(localStorage.getItem("usersList")) || [];
-  const userExist = usersList.some((user) => user.id == userData?.id );
+  const userExist = usersList.some((user) => user.id == userData?.id);
 
-
-  function handleAuthUser(){
+  function handleAuthUser() {
     authButton.textContent = "Sign out";
     accountButton.classList.remove("d-none");
   }
-  function handleNotAuthUser(){
+  function handleNotAuthUser() {
     authButton.innerHTML = "Sign in";
     accountButton.classList.add("d-none");
   }
@@ -26,26 +33,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   authButton.addEventListener("click", () => {
-
-    if(userData && userExist){
+    if (userData && userExist) {
       localStorage.removeItem("userData");
       localStorage.removeItem("userRole");
       window.location.href = "../home/index.html";
-    }else{
+    } else {
       window.location.href = "../sign-in/index.html";
     }
   });
 
   accountButton.addEventListener("click", () => {
-
-    if(userData.role === "customer"){
-      window.location.href = "../user-dashboard/index.html"; 
+    if (userData.role === "customer") {
+      window.location.href = "../user-dashboard/index.html";
     }
-    if(userData.role === "seller"){
-      window.location.href = '../../../dashboard/seller/index.html';
+    if (userData.role === "seller") {
+      window.location.href = "../../../dashboard/seller/index.html";
     }
-
   });
-
-
 });
