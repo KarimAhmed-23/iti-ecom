@@ -10,15 +10,7 @@ $("#sidebar-open").click(function () {
   $(".sidebar").addClass("active");
 });
 
-$(".logoBox").click(function () {
-  window.location.href = `${window.location.origin}/store/home/index.html`;
-});
 
-$(".logout-link").click(function () {
-  localStorage.removeItem("userData");
-  localStorage.removeItem("userRole");
-  window.location.href = `${window.location.origin}/store/home/index.html`;
-});
 
 /*------------- #show and hide password   --------------*/
 

@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const accountButton = document.getElementById("accountButton");
 
   const userData = JSON.parse(localStorage.getItem("userData"));
+  const usersList = JSON.parse(localStorage.getItem("usersList")) || [];
+  const userExist = usersList.some((user) => user.id == userData?.id );
+
 
   function handleAuthUser(){
     authButton.textContent = "Sign out";
@@ -14,15 +17,17 @@ document.addEventListener("DOMContentLoaded", () => {
     accountButton.classList.add("d-none");
   }
 
-  if (userData) {
+  if (userData && userExist) {
     handleAuthUser();
   } else {
     handleNotAuthUser();
+    localStorage.removeItem("userData");
+    localStorage.removeItem("userRole");
   }
 
   authButton.addEventListener("click", () => {
 
-    if(userData){
+    if(userData && userExist){
       localStorage.removeItem("userData");
       localStorage.removeItem("userRole");
       window.location.href = "../home/index.html";

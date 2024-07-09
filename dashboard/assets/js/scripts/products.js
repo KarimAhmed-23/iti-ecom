@@ -123,10 +123,7 @@ const validateInputs = () => {
     setValidationError(price, "Product price is required.");
     isValid = false;
   }
-  if (!discount.value.trim()) {
-    setValidationError(discount, "Product discount is required.");
-    isValid = false;
-  } else if (
+  if (
     isNaN(discount.value.trim()) ||
     parseInt(discount.value.trim()) < 1 ||
     parseInt(discount.value.trim()) > 99
