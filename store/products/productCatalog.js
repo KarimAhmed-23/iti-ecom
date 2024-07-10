@@ -6,6 +6,15 @@ function showProductList() {
   const productsList = JSON.parse(localStorage.getItem("productsList")) || []; // Retrieve products list from local storage
   const productListElement = document.getElementById("product-list");
 
+  if (productsList.length === 0) {
+    const tr = document.createElement("tr");
+    productListElement.innerHTML = `<div class="no-product-found text-center w-100">
+                <img src='../products/no-product-found.png' alt='No product found' class='not-found-image'>
+            </div>`;
+    return;
+  }
+
+
   productsList.forEach((product) => {
       const productCard = document.createElement("div");
       productCard.classList.add("col-md-4");
@@ -15,7 +24,7 @@ function showProductList() {
           <div class="product-info">
               <p class="product-name">${product.name}</p>
               <p class="product-price">
-                  ${product.discount > 0 ? `<span class="original-price">${product.price} EGP</span> <span class="discounted-price">${(product.price - (product.price * product.discount / 100)).toFixed(2)} EGP</span>` : `${product.price} EGP`}
+                  ${product.discount > 0 ? `<span class="original-price">${product.price} EGP</span> <span class="discounted-price">${Math.floor(product.price - (product.price * product.discount / 100))} EGP</span>` : `${product.price} EGP`}
               </p>
               <p class="product-quantity">Quantity: ${product.quantity}</p>
               <div class="product-buttons">
