@@ -86,7 +86,7 @@ const showOrderDetails = (id) => {
   ${userData.role === "admin" ? `<th>seller</th>` : ""}
   <th>product name</th>
   <th>price</th>
-  <th>quantity</th>
+  <th>count</th>
   <th>total price</th>
     
   `;

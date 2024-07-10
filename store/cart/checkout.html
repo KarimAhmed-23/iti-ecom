@@ -29,6 +29,7 @@
             var usersList = JSON.parse(localStorage.getItem("usersList")) || [];
             var cartList = JSON.parse(localStorage.getItem("cartList")) || [];
             var productsList = JSON.parse(localStorage.getItem("productsList")) || [];
+            var ordersList = JSON.parse(localStorage.getItem("ordersList")) || [];
             var userData = JSON.parse(localStorage.getItem("userData"));
             var userCard = cartList.find((el) => el.cartOwner == userData.id);
 
@@ -38,7 +39,7 @@
             }
 
             
-            objusercard = cartList.filter((el) => el.cartOwner == userData.id);
+            var objusercard = cartList.filter((el) => el.cartOwner == userData.id);
             _TotalOrderPrice = userCard.totalCartPrice;
             const date = new Date();
             let radios = document.querySelectorAll('input[type="radio"]');
@@ -49,24 +50,25 @@
             saveorder = document.getElementById("save");
 
             saveorder.addEventListener('click', function (e) {
-                (() => {
-                    'use strict'
+                // (() => {
+                //     'use strict'
 
-                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                    const forms = document.querySelectorAll('.needs-validation')
+                //     // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                //     const forms = document.querySelectorAll('.needs-validation')
 
-                    // Loop over them and prevent submission
-                    Array.from(forms).forEach(form => {
-                        form.addEventListener('click', event => {
-                            if (!form.checkValidity()) {
-                                event.preventDefault()
-                                event.stopPropagation()
-                            } 
+                //     // Loop over them and prevent submission
+                //     Array.from(forms).forEach(form => {
+                //         form.addEventListener('click', event => {
+                //             if (!form.checkValidity()) {
+                //                 event.preventDefault()
+                //                 event.stopPropagation()
+                //             } 
 
-                            form.classList.add('was-validated')
-                        }, false)
-                    })
-                })();
+                //             form.classList.add('was-validated')
+                //         }, false)
+                //     })
+                
+                // })();
                 Name = document.getElementById("validationCustom01");
                 let Nameval = Name.value;
                 phone = document.getElementById("validationCustom02");
@@ -78,37 +80,49 @@
                 for (let radio of radios) {
                     if (!radio.checked || Nameval.trim().length == 0 || cityval.trim().length == 0 || phoneval.trim().length == 0 || addressval.trim().length == 0 ||userCard.products.length == 0) {
                         e.preventDefault();
-                        // alert("enter your data");
+                          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                        const forms = document.querySelectorAll('.needs-validation')
+
+                        // Loop over them and prevent submission
+                        Array.from(forms).forEach(form => {
+                                if (!form.checkValidity()) {
+                                    event.preventDefault()
+                                    event.stopPropagation()
+                                } 
+
+                                form.classList.add('was-validated')
+                        
+                        })
+
                     } else {
                         const uid = generateUID();
-                        ordersList = [
-                            {
-                                id: uid, //uuid
-                                // id: ordersList.length
-                                //     ? Math.max(...ordersList.map((p) => parseInt(p.id))) + 1
-                                //     : 1,
-                                orderOwner: userCard.cartOwner, // id of userData
-                                totalOrderPrice: _TotalOrderPrice,
-                                paymentMethodType: radio.value,
-                                orderStatus: "processing",
-                                billDetails: {
-                                    name: Nameval,
-                                    phone: phoneval,
-                                    city: cityval,
-                                    address: addressval,
-                                },
-                                createdAt: date,
-                                products: userCard.products,
-
+                        const order = {
+                            id: uid, 
+                            orderOwner: userData.id, // id of userData
+                            totalOrderPrice: _TotalOrderPrice,
+                            paymentMethodType: radio.value,
+                            orderStatus: "processing",
+                            billDetails: {
+                                name: Nameval,
+                                phone: phoneval,
+                                city: cityval,
+                                address: addressval,
                             },
-                        ];
-                        localStorage.removeItem("ordersList");
-                        localStorage.setItem("ordersList", JSON.stringify(ordersList));
-                        cartList[userData.id - 1].products = [];
-                        cartList[userData.id - 1].totalCartPrice = 0;
-                        localStorage.removeItem("cartList");
-                        localStorage.setItem("cartList", JSON.stringify(cartList));
+                            createdAt: date,
+                            products: userCard.products,
+
+                        }
+                        ordersList.push(order);      
+                        userCard.products.forEach(el =>{
+                            decrementAddedProductQuantity(el.product.id , el.count);
+                        })             
+                        const updatedCartList = cartList.filter(el => el.cartOwner != userData.id);
+                        localStorage.setItem("ordersList" , JSON.stringify(ordersList));       
+                        localStorage.setItem("cartList" , JSON.stringify(updatedCartList));
+                        
                         alert("your order done");
+                        window.location.href = ""
+
                     }
                 };
             });
@@ -141,8 +155,18 @@
 
         }); //end of load
         function generateUID() {
-    return Date.now().toString(20) + Math.random().toString(20).substr(2, 5);
-};
+                  return Date.now().toString(20) + Math.random().toString(20).substr(2, 5);
+        };
+        function decrementAddedProductQuantity(productId , count) {
+            const updatedProductsList = JSON.parse(localStorage.getItem("productsList")) || [];
+            const productIndex = updatedProductsList.findIndex(
+                (product) => product.id == productId
+            );
+            if (productIndex !== -1) {
+                updatedProductsList[productIndex].quantity -= count;
+                localStorage.setItem("productsList", JSON.stringify(updatedProductsList));
+            }
+    }
     </script>
 </head>
 
@@ -192,12 +216,12 @@
                     <div class="col-12">
                         <label for="validationCustom01" class="form-label ms-1">Name</label>
                         <input type="text" class="form-control" id="validationCustom01" required>
-                        <div class="valid-feedback">
-                            Looks good!
+                        <div class="invalid-feedback">
+                            Please provide a valid name.
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="validationCustom05" class="form-label ms-1">phone</label>
+                        <label for="validationCustom02" class="form-label ms-1">phone</label>
                         <input type="text" class="form-control" id="validationCustom02" required>
                         <div class="invalid-feedback">
                             Please provide a valid phone.
@@ -211,7 +235,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="validationCustom03" class="form-label ms-1">Address</label>
+                        <label for="validationCustom04" class="form-label ms-1">Address</label>
                         <input type="text" class="form-control" id="validationCustom04" required>
                         <div class="invalid-feedback">
                             Please provide a valid address.

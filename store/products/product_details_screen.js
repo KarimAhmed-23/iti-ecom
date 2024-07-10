@@ -90,17 +90,16 @@ function handleIfAuthenticatedUser(userId) {
 }
 function decrementAddedProductQuantity(productId) {
 
+  // const productsList = JSON.parse(localStorage.getItem("productsList")) ?? [];
+  // const productIndex = productsList.findIndex(
+  //   (product) => product.id == productId
+  // );
+  // if (productIndex !== -1) {
+  //   productsList[productIndex].quantity -= 1;
+  //   localStorage.setItem("productsList", JSON.stringify(productsList));
+  // }
   
-  const productsList = JSON.parse(localStorage.getItem("productsList")) ?? [];
-  const productIndex = productsList.findIndex(
-    (product) => product.id == productId
-  );
 
-
-  if (productIndex !== -1) {
-    productsList[productIndex].quantity -= 1;
-    localStorage.setItem("productsList", JSON.stringify(productsList));
-  }
 }
 
 function showProductDetails() {

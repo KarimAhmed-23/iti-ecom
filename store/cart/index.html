@@ -78,13 +78,13 @@
             } else {
 
                 const existingProducts = userCard.products.filter(cartProduct =>
-                    productsList.some(product => product.id === cartProduct.product.id)
+                    productsList.some(product => product.id === cartProduct.product.id &&  product.quantity > 0 ) 
                 );
                 userCard.products = existingProducts;
                 localStorage.setItem("cartList", JSON.stringify(cartList));
                 
                 userCard.products.map(ele => {
-                    if(productsList.some((p) => p.id == ele.product.id )){
+                    if(productsList.some((p) => p.id == ele.product.id && p.quantity > 0 )){
                         const currentProduct = productsList.find(el => el.id == ele.product.id );
                         obj = {
                             id: 0,
@@ -118,7 +118,7 @@
                     tbody = document.getElementsByTagName("tbody")[0];
                     creat_tdimg = document.createElement("td");
                     products.forEach(obj => {
-                        const currentQty = userCard.products.find(el => el.product.id == obj.id ).count = 1;
+                        const currentQty = productsList.find(el => el.id == obj.id ).quantity = 1 ;
                         var creat_tr = document.createElement("tr");
                         let values = Object.values(obj);
                         for (let i = 0; i < values.length; i++) {
@@ -166,7 +166,7 @@
                             incnum = Number(this.nextSibling.innerHTML);
                             products.map(ele => {
                                 if (ele.id == this.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerHTML) {
-                                    qu = ele.quantity;
+                                    qu = Number(ele.quantity);
                                 }
                             });
                             if (incnum >= Number(qu)) {

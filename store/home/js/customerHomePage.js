@@ -49,7 +49,11 @@ function showProductList() {
                         : `${product.price} EGP`
                     }
                 </p>
-                <p class="product-quantity">Quantity: ${product.quantity}</p>
+                <p class="product-quantity">Quantity: ${
+                  product.quantity > 0
+                    ? product.quantity
+                    : '<b class="text-danger">Sold Out</b>'
+                }</p>
                 <div class="product-buttons">
                     <a href="../products/product_details_screen.html?id=${
                       product.id
