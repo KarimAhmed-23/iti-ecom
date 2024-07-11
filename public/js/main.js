@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   accountButton.addEventListener("click", () => {
     if (userData.role === "customer") {
-      window.location.href = "../user-dashboard/index.html";
+      window.location.href = "../../../dashboard/user/index.html";
     }
     if (userData.role === "seller") {
       window.location.href = "../../../dashboard/seller/index.html";

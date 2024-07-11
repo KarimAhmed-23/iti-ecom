@@ -29,7 +29,7 @@ function showProductList() {
 
   productsList.forEach((product) => {
     const productCard = document.createElement("div");
-    productCard.classList.add("col-md-4");
+    productCard.classList.add("col-lg-4" , "col-md-6");
     const productHTML = `
         <div class="product-card">
             <img src="${
