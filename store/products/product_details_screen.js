@@ -43,7 +43,7 @@ function handleIfAuthenticatedUser(userId) {
   }
 
   const discountedPrice = productToAdd.discount
-    ? productToAdd.price - (productToAdd.price * (productToAdd.discount / 100))
+    ? Math.floor(productToAdd.price - (productToAdd.price * (productToAdd.discount / 100)))
     : productToAdd.price;
 
   const cartIndex = cartList.findIndex((cart) => cart.cartOwner === userId);
