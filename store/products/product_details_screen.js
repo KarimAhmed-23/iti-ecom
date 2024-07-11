@@ -127,6 +127,7 @@ function showProductDetails() {
 
 function populateProductDetails(product) {
   let AddToCardBtn = document.getElementById("AddToCardBtn");
+  const userData = JSON.parse(localStorage.getItem("userData"));
 
   document.querySelector(".product-name").textContent = product.name;
   document.querySelector(".product-seller").textContent = `Seller : ${product.seller.name === "admin" ? "Our E-Com" : product.seller.name}`;
@@ -153,6 +154,10 @@ function populateProductDetails(product) {
     AddToCardBtn.style.pointerEvents = "none";
   }
 
+  if(userData && userData?.role != "customer"){
+    AddToCardBtn.remove();
+  }
+  
 
 }
 

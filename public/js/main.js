@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const userExist = usersList.some((user) => user.id == userData?.id);
 
   function handleAuthUser() {
-    authButton.textContent = "Sign out";
+    authButton.textContent = "Log out";
     accountButton.classList.remove("d-none");
   }
   function handleNotAuthUser() {

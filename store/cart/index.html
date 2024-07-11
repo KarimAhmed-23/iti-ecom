@@ -58,6 +58,10 @@
             var cartList = JSON.parse(localStorage.getItem("cartList")) || [];
             var productsList = JSON.parse(localStorage.getItem("productsList")) || [];
             var userData = JSON.parse(localStorage.getItem("userData"));
+
+            if(userData.role != "customer"){
+                window.location.href ="../home/index.html";
+            }
                 
             if (!userData || !usersList.some((user) => user.id == userData?.id )) {
                 let section = document.getElementsByTagName("section")[1];
