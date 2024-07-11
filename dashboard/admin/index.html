@@ -313,26 +313,15 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // const userData = JSON.parse(localStorage.getItem("userData"));
         const productsList =
           JSON.parse(localStorage.getItem("productsList")) || [];
         const ordersList = JSON.parse(localStorage.getItem("ordersList")) || [];
         const usersList = JSON.parse(localStorage.getItem("usersList")) || [];
 
-        let products;
-        let orders;
+        let products = productsList;
+        let orders = ordersList;
 
-        if (userData.role === "seller") {
-          products = productsList.filter((el) => el.seller.id == userData.id);
-          orders = ordersList.filter((el) => el.orderOwner == userData.id);
-        } else if (userData.role === "admin") {
-          products = productsList;
-          orders = ordersList;
-        } else {
-          products = [];
-          orders = [];
-        }
-
+      
         const total_sales = orders.reduce(
           (sum, order) => (sum += Number(order.totalOrderPrice)),
           0

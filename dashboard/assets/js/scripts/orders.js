@@ -4,27 +4,7 @@ const ordersTableBody = document.getElementById("orders_table_body");
 
 let orders;
 if (userData.role === "seller") {
-  orders = ordersList
-    .map((order) => {
-      const sellerProducts = order.products.filter(
-        (product) => product.product.seller.id === userData.id
-      );
-
-      if (sellerProducts.length > 0) {
-        return {
-          ...order,
-          products: sellerProducts,
-          totalOrderPrice: sellerProducts.reduce(
-            (acc, item) => acc + item.totalPrice,
-            0
-          ),
-        };
-      } else {
-        return null;
-      }
-    })
-    .filter((order) => order !== null);
-
+  orders = ordersList.filter((el) => el.sellerId == userData.id);
   console.log(orders);
 } else if (userData.role === "admin") {
   orders = ordersList;
@@ -207,6 +187,7 @@ const changeOrderStatus = (orderId, status) => {
       order.products.forEach((el) => {
         incrementRemovedProductQuantity(el.product.id, el.count);
       });
+      order.totalOrderPrice = 0;
     }
 
     localStorage.setItem("ordersList", JSON.stringify(ordersList));

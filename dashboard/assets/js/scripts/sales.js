@@ -3,27 +3,7 @@ const ordersList = JSON.parse(localStorage.getItem("ordersList")) || [];
 
 let orders;
 if (userData.role === "seller") {
-  orders = ordersList
-    .map((order) => {
-      const sellerProducts = order.products.filter(
-        (product) => product.product.seller.id === userData.id
-      );
-
-      if (sellerProducts.length > 0) {
-        return {
-          ...order,
-          products: sellerProducts,
-          totalOrderPrice: sellerProducts.reduce(
-            (acc, item) => acc + item.totalPrice,
-            0
-          ),
-        };
-      } else {
-        return null;
-      }
-    })
-    .filter((order) => order !== null);
-    
+  orders = ordersList.filter((el) => el.sellerId == userData.id);
 } else if (userData.role === "admin") {
   orders = ordersList;
 } else {

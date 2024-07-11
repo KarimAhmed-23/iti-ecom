@@ -96,23 +96,45 @@
 
                     } else {
                         const uid = generateUID();
-                        const order = {
-                            id: uid, 
-                            orderOwner: userData.id, // id of userData
-                            totalOrderPrice: _TotalOrderPrice,
-                            paymentMethodType: radio.value,
-                            orderStatus: "processing",
-                            billDetails: {
-                                name: Nameval,
-                                phone: phoneval,
-                                city: cityval,
-                                address: addressval,
-                            },
-                            createdAt: date,
-                            products: userCard.products,
 
-                        }
-                        ordersList.push(order);      
+                        const productsBySeller = {};
+                        let currentSellerId = null;
+
+                        userCard.products.forEach((item) => {
+                             let sellerId = item.product.seller.id;
+                            if (!productsBySeller[sellerId]) {
+                                productsBySeller[sellerId] = [];
+                            }
+                            productsBySeller[sellerId].push(item);
+                        });
+                        Object.keys(productsBySeller).forEach((sellerId) => {
+                            const sellerProducts = productsBySeller[sellerId];
+                            const totalOrderPrice = sellerProducts.reduce((acc, item) => {
+                                const product = item.product;
+                                const discountedPrice = product.price * (1 - product.discount / 100);
+                                return acc + discountedPrice * item.count;
+                            }, 0);
+                            const order = {
+                                id: generateUID(), 
+                                orderOwner: userData.id,
+                                sellerId : sellerId,
+                                paymentMethodType: radio.value,
+                                orderStatus: "processing",
+                                billDetails: {
+                                 name: Nameval,
+                                 phone: phoneval,
+                                 city: cityval,
+                                 address: addressval,
+                                 },
+                                createdAt: date,
+                                products: sellerProducts,
+                                totalOrderPrice: totalOrderPrice,
+                            };
+
+                            ordersList.push(order);
+                        });
+
+                        console.log(productsBySeller);
                         userCard.products.forEach(el =>{
                             decrementAddedProductQuantity(el.product.id , el.count);
                         })             
@@ -122,6 +144,26 @@
                         
                         alert("your order done");
                         window.location.href = ""
+
+                        // const order = {
+                        //     id: uid, 
+                        //     orderOwner: userData.id,
+                        //     paymentMethodType: radio.value,
+                        //     orderStatus: "processing",
+                        //     billDetails: {
+                        //         name: Nameval,
+                        //         phone: phoneval,
+                        //         city: cityval,
+                        //         address: addressval,
+                        //     },
+                        //     createdAt: date,
+
+                        //     products: userCard.products,
+                        //     totalOrderPrice: _TotalOrderPrice,
+
+                        // }
+                        // ordersList.push(order);      
+                       
 
                     }
                 };

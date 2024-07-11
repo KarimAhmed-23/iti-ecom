@@ -64,7 +64,14 @@ const renderProducts = () => {
         <td>${product.id}</td>
         ${userData.role === "admin" ? `<td>${product.seller.name}</td>` : ""}
         <td>${product.name}</td>
-        <td>${product.price} EGP</td>
+        <td>${
+          product.discount > 0
+            ? Math.floor(
+                Number(product.price) -
+                  (Number(product.price) * Number(product.discount)) / 100
+              )
+            : Number(product.price)
+        } EGP</td>
         <td>${product.quantity}</td>
         <td>${product.category.name}</td>
         <td>
