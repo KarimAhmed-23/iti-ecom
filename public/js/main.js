@@ -16,8 +16,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const userExist = usersList.some((user) => user.id == userData?.id);
 
   function handleAuthUser() {
-    authButton.textContent = "Log out";
+    authButton.textContent = "Logout";
     accountButton.classList.remove("d-none");
+    if (userData.role === "customer") {
+      accountButton.textContent = "My Account"
+    }
+    if (userData.role === "seller") {
+      accountButton.textContent = "Dashboard"
+    }
+
   }
   function handleNotAuthUser() {
     authButton.innerHTML = "Sign in";
@@ -36,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (userData && userExist) {
       localStorage.removeItem("userData");
       localStorage.removeItem("userRole");
-      window.location.href = "../home/index.html";
+      window.location.href = `${window.location.origin}/store/home/index.html`;
     } else {
       window.location.href = "../sign-in/index.html";
     }

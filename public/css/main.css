@@ -1,3 +1,9 @@
+/*------------- #navbar--------------*/
+@media (max-width: 991.98px) {
+  .auth_wrapper {
+    margin: 0.75rem 0;
+  }
+}
 
 /*------------- #product-card--------------*/
 
@@ -56,4 +62,50 @@
   max-height: 300px;
   object-fit: contain;
   max-width: 100%;
+}
+
+/*------------- #user-dashboard--------------*/
+
+
+.account-tabs {
+  padding: 1.5rem 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+.account-tabs .tab-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.account-tabs .tab-list .item-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  transition: all 0.3s ease;
+  gap: 0.5rem;
+  font-size: 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  color: #000;
+  text-decoration: none;
+  text-transform: capitalize;
+}
+.account-tabs .tab-list .item-link.active {
+  background-color: #0d6efd;
+  color: #fff;
+}
+.account-tabs .tab-list .item-link:hover:not(.active) {
+  background-color: #eee;
+}
+
+.account-section .wrapper-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #dee2e6;
 }

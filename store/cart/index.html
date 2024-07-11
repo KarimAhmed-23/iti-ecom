@@ -196,7 +196,11 @@
                             userCard.products.map(elem => {
                                 if (elem.product.id == this.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerHTML) {
                                     elem.count = parseInt(num.innerHTML);
-                                    elem.totalPrice = elem.product.price * elem.count;
+                                    let price = elem.product.discount > 0 
+                                                ? Math.floor(Number(elem.product.price) - (Number(elem.product.price) * Number(elem.product.discount) / 100)) 
+                                                : Number(elem.product.price);
+
+                                    elem.totalPrice = price * elem.count;
                                     
 
                                 }
@@ -231,7 +235,11 @@
                                     if (elem.product.id == this.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerHTML) {
                                         elem.count = dec;
 
-                                        elem.totalPrice = elem.product.price * elem.count;
+                                        let price = elem.product.discount > 0 
+                                                ? Math.floor(Number(elem.product.price) - (Number(elem.product.price) * Number(elem.product.discount) / 100)) 
+                                                : Number(elem.product.price);
+
+                                        elem.totalPrice = price * elem.count;
                                     }
                                 });
                                 userCard.totalCartPrice = allprice;
