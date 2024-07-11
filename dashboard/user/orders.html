@@ -250,7 +250,7 @@
     <script type="text/javascript" src="../../public/js/main.js"></script>
 
     <script>
-      const ordersList = JSON.parse(localStorage.getItem("ordersList"));
+      const ordersList = JSON.parse(localStorage.getItem("ordersList")) || [];
       const userData = JSON.parse(localStorage.getItem("userData")) || {};
       const ordersBoxes = document.getElementById("ordersBoxes");
 
