@@ -59,9 +59,6 @@
             var productsList = JSON.parse(localStorage.getItem("productsList")) || [];
             var userData = JSON.parse(localStorage.getItem("userData"));
 
-            if(userData.role != "customer"){
-                window.location.href ="../home/index.html";
-            }
                 
             if (!userData || !usersList.some((user) => user.id == userData?.id )) {
                 let section = document.getElementsByTagName("section")[1];
@@ -69,6 +66,9 @@
                 let section1 = document.getElementById("authError");
                 section1.style.display = "block";
                 return;
+            }
+            if(userData?.role != "customer"){
+                window.location.href ="../home/index.html";
             }
 
             var userCard = cartList.find((el) => el.cartOwner == userData.id);
@@ -346,6 +346,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="../cart/index.html">Shopping Cart</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../contact/index.html">Contact Us</a>
+                          </li>
                        
                     </ul>
   

@@ -6,7 +6,6 @@
     <title>Home Page</title>
     <link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="../../public/css/main.css" />
-
   </head>
 
   <body>
@@ -44,7 +43,6 @@
               <li class="nav-item">
                 <a class="nav-link" href="../contact/index.html">Contact Us</a>
               </li>
-
             </ul>
 
             <div
@@ -64,74 +62,38 @@
       </div>
     </header>
 
-    <div class="container">
-      <div
-        id="carouselExampleIndicators"
-        class="carousel slide"
-        data-ride="carousel"
-      >
-        <ol class="carousel-indicators">
-          <li
-            data-target="#carouselExampleIndicators"
-            data-slide-to="0"
-            class="active"
-          ></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img
-              class="d-block img-fluid"
-              src="banner/1.avif"
-              alt="First slide"
-            />
-          </div>
-          <div class="carousel-item">
-            <img
-              class="d-block img-fluid"
-              src="banner/2.avif"
-              alt="Second slide"
-            />
-          </div>
-          <div class="carousel-item">
-            <img
-              class="d-block img-fluid"
-              src="banner/3.avif"
-              alt="Third slide"
-            />
-          </div>
+    <div class="container pb-5">
+      <h1 class="mb-4">Contact Us</h1>
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" required />
         </div>
-        <a
-          class="carousel-control-prev"
-          href="#carouselExampleIndicators"
-          role="button"
-          data-slide="prev"
-        >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a
-          class="carousel-control-next"
-          href="#carouselExampleIndicators"
-          role="button"
-          data-slide="next"
-        >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
-    </div>
-
-    <div class="container py-5">
-      <h1 class="text-center mb-4">Featured Products</h1>
-      <div class="row" id="product-list">
-        <!-- Products will be dynamically added here -->
-      </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" id="email" required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone number</label>
+          <input type="tel" class="form-control" id="phone" required />
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea
+            class="form-control"
+            id="message"
+            rows="5"
+            required
+          ></textarea>
+        </div>
+        <div class="text-start">
+          <button type="submit" class="btn btn-primary px-5">Submit</button>
+        </div>
+      </form>
     </div>
 
     <footer class="bg-light mt-auto border-top">
-      <div class="container text-center  py-3">
+      <div class="container text-center py-3">
         ©<span>
           <script>
             document.write(new Date().getFullYear());
@@ -151,7 +113,39 @@
       type="text/javascript"
       src="../bootstrap/js/bootstrap.bundle.js"
     ></script>
-    <script type="text/javascript" src="js/customerHomePage.js"></script>
     <script type="text/javascript" src="../../public/js/main.js"></script>
+
+    <script>
+      /*------------- # Contact Modal    --------------*/
+
+      contactForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const message = document.getElementById("message").value;
+
+        if (name && email && phone && message) {
+          const messagesList =
+            JSON.parse(localStorage.getItem("messagesList")) || [];
+          const newMessage = {
+            id: messagesList.length + 1,
+            name,
+            email,
+            phone,
+            message,
+          };
+          messagesList.push(newMessage);
+          localStorage.setItem("messagesList", JSON.stringify(messagesList));
+
+          contactForm.reset();
+          window.scrollTo(0,0);
+          alert("Message sent successfully!");
+        } else {
+          alert("Please fill in all fields.");
+        }
+      });
+    </script>
   </body>
 </html>

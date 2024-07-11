@@ -31,13 +31,17 @@
             var productsList = JSON.parse(localStorage.getItem("productsList")) || [];
             var ordersList = JSON.parse(localStorage.getItem("ordersList")) || [];
             var userData = JSON.parse(localStorage.getItem("userData"));
-            var userCard = cartList.find((el) => el.cartOwner == userData.id);
+            var userCard = cartList.find((el) => el.cartOwner == userData?.id);
 
 
 
-            if (!userData || !usersList.some((user) => user.id == userData?.id ) || !userCard || userData.role != "customer") {
+            if (!userData || !usersList.some((user) => user.id == userData?.id ) || !userCard) {
                 window.location.href = "../home/index.html"
                 return;
+            }
+
+            if(userData?.role != "customer"){
+                window.location.href ="../home/index.html";
             }
 
             
@@ -235,6 +239,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="../cart/index.html">Shopping Cart</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../contact/index.html">Contact Us</a>
+                          </li>
                        
                     </ul>
   
