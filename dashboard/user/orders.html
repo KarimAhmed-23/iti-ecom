@@ -285,7 +285,7 @@
       function renderOrders() {
         ordersBoxes.innerHTML = "";
 
-        integratedOrders.forEach((order) => {
+        integratedOrders.reverse().forEach((order) => {
           const orderBox = document.createElement("div");
           orderBox.classList.add("order-item");
           orderBox.innerHTML = `
