@@ -285,35 +285,31 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        getHomeStatistics();
+      });
+      function getHomeStatistics() {
+       
         const userData = JSON.parse(localStorage.getItem("userData"));
         const productsList =
           JSON.parse(localStorage.getItem("productsList")) || [];
         const ordersList = JSON.parse(localStorage.getItem("ordersList")) || [];
 
-        let products;
-        let orders;
-
-        if (userData.role === "seller") {
-          products = productsList.filter((el) => el.seller.id == userData.id);
-          orders = ordersList.filter((el) => el.sellerId == userData.id);
-          
-        } else if (userData.role === "admin") {
-          products = productsList;
-          orders = ordersList;
-        } else {
-          products = [];
-          orders = [];
-        }
+        let products = productsList.filter((el) => el.seller.id == userData.id);
+        let orders = ordersList.filter(
+          (el) => el.sellerId == userData.id && el.totalOrderPrice > 0
+        );
 
         const total_sales = orders.reduce(
           (sum, order) => (sum += Number(order.totalOrderPrice)),
           0
         );
 
+        console.log(ordersList);
+
         $("#products_no").text(products.length);
         $("#orders_no").text(orders.length);
         $("#sales_no").text(total_sales);
-      });
+      }
     </script>
 
     <!-- <script>

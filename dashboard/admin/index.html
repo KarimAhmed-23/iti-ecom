@@ -30,7 +30,6 @@
 
   <body>
     <div class="root-wrapper">
-
       <aside class="sidebar">
         <div class="slidebar-content">
           <a class="logoBox" href="#"> Our E-com</a>
@@ -83,7 +82,6 @@
       </aside>
 
       <main class="page-wrapper">
-
         <nav class="top-nav">
           <div class="container-fluid w-100 h-100">
             <div class="nav-content">
@@ -93,11 +91,7 @@
                 </button>
               </div>
               <div class="nav-actions">
-                <a
-                  class="account-btn"
-                  href="#"
-                  aria-expanded="false"
-                >
+                <a class="account-btn" href="#" aria-expanded="false">
                   <img
                     src="../assets/img/avatar.png"
                     class="admin-avatar ml-4"
@@ -292,7 +286,6 @@
             </div>
           </div>
         </div>
-
       </main>
     </div>
 
@@ -305,23 +298,25 @@
     <!-- main style js   -->
     <script src="../assets/js/main.js"></script>
 
-     <!-- adminAuth script   -->
-     <script src="../assets/js/scripts/adminAuth.js"></script>
+    <!-- adminAuth script   -->
+    <script src="../assets/js/scripts/adminAuth.js"></script>
 
     <!-- orders script   -->
     <script src="../assets/js/scripts/orders.js"></script>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        getHomeStatistics();
+      });
+      function getHomeStatistics() {
         const productsList =
           JSON.parse(localStorage.getItem("productsList")) || [];
         const ordersList = JSON.parse(localStorage.getItem("ordersList")) || [];
         const usersList = JSON.parse(localStorage.getItem("usersList")) || [];
 
         let products = productsList;
-        let orders = ordersList;
+        let orders = ordersList.filter((el) => el.totalOrderPrice > 0);
 
-      
         const total_sales = orders.reduce(
           (sum, order) => (sum += Number(order.totalOrderPrice)),
           0
@@ -331,9 +326,7 @@
         $("#products_no").text(products.length);
         $("#orders_no").text(orders.length);
         $("#sales_no").text(total_sales);
-      });
+      }
     </script>
-
-
   </body>
 </html>

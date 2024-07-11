@@ -3,9 +3,9 @@ const ordersList = JSON.parse(localStorage.getItem("ordersList")) || [];
 
 let orders;
 if (userData.role === "seller") {
-  orders = ordersList.filter((el) => el.sellerId == userData.id);
+  orders = ordersList.filter((el) => el.sellerId == userData.id && el.totalOrderPrice > 0);
 } else if (userData.role === "admin") {
-  orders = ordersList;
+  orders = ordersList.filter((el) => el.totalOrderPrice > 0);
 } else {
   orders = [];
 }

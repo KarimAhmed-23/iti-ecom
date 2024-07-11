@@ -5,14 +5,12 @@ const ordersTableBody = document.getElementById("orders_table_body");
 let orders;
 if (userData.role === "seller") {
   orders = ordersList.filter((el) => el.sellerId == userData.id);
-  console.log(orders);
 } else if (userData.role === "admin") {
   orders = ordersList;
 } else {
   orders = [];
 }
 
-console.log(orders);
 
 const renderTable = () => {
   ordersTableBody.innerHTML = "";
@@ -188,10 +186,12 @@ const changeOrderStatus = (orderId, status) => {
         incrementRemovedProductQuantity(el.product.id, el.count);
       });
       order.totalOrderPrice = 0;
+      
     }
 
     localStorage.setItem("ordersList", JSON.stringify(ordersList));
     renderTable();
+    getHomeStatistics();
   }
 };
 
