@@ -174,9 +174,10 @@
               </li>
 
               <li class="nav-item">
-                <a class="nav-link" href="../../store/contact/index.html">Contact Us</a>
+                <a class="nav-link" href="../../store/contact/index.html"
+                  >Contact Us</a
+                >
               </li>
-
             </ul>
 
             <div
@@ -254,6 +255,7 @@
       const ordersBoxes = document.getElementById("ordersBoxes");
 
       const MyOrders = ordersList.filter((el) => el.orderOwner == userData.id);
+
       const integrateOrders = (orders) => {
         const orderMap = {};
 
@@ -280,10 +282,17 @@
         return Object.values(orderMap);
       };
       const integratedOrders = integrateOrders(MyOrders);
-      console.log(integratedOrders);
 
       function renderOrders() {
         ordersBoxes.innerHTML = "";
+
+        if (MyOrders.length === 0) {
+          ordersBoxes.innerHTML = `
+            <div class="alert alert-info w-100 text-center">No Orders Found</div>
+            `;
+          ordersTableBody.appendChild(tr);
+          return;
+        }
 
         integratedOrders.reverse().forEach((order) => {
           const orderBox = document.createElement("div");
