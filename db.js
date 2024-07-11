@@ -38,7 +38,7 @@ productsList = [
     },
   },
 ];
-
+l 
 // cartList array
 const cartList = [
   {
@@ -140,16 +140,16 @@ messagesList=[
 ]
 
 // categories array
-const categories = [
-  "Electronics",
-  "Clothing",
-  "Home",
-  "Books",
-  "Health",
-  "Games",
-  "Sports",
-  "Automotive",
-  "Watches",
-  "Food",
-];
+// const categories = [
+//   "Electronics",
+//   "Clothing",
+//   "Home",
+//   "Books",
+//   "Health",
+//   "Games",
+//   "Sports",
+//   "Automotive",
+//   "Watches",
+//   "Food",
+// ];
 

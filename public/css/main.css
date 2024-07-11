@@ -57,3 +57,13 @@
   object-fit: contain;
   max-width: 100%;
 }
+.form-control {
+  border-radius: 20px; 
+  width: 300px;  
+  border-color: #ced4da;  
+}
+
+ 
+.form-inline {
+  margin-bottom: 0; 
+}
