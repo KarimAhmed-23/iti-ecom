@@ -2,17 +2,40 @@ var userData = userData || JSON.parse(localStorage.getItem("userData"));
 const ordersList = JSON.parse(localStorage.getItem("ordersList")) || [];
 const ordersTableBody = document.getElementById("orders_table_body");
 
+let orders;
+if (userData.role === "seller") {
+  orders = ordersList
+    .map((order) => {
+      const sellerProducts = order.products.filter(
+        (product) => product.product.seller.id === userData.id
+      );
+
+      if (sellerProducts.length > 0) {
+        return {
+          ...order,
+          products: sellerProducts,
+          totalOrderPrice: sellerProducts.reduce(
+            (acc, item) => acc + item.totalPrice,
+            0
+          ),
+        };
+      } else {
+        return null;
+      }
+    })
+    .filter((order) => order !== null);
+
+  console.log(orders);
+} else if (userData.role === "admin") {
+  orders = ordersList;
+} else {
+  orders = [];
+}
+
+console.log(orders);
 
 const renderTable = () => {
   ordersTableBody.innerHTML = "";
-  let orders;
-  if (userData.role === "seller") {
-    orders = ordersList.filter((el) => el.orderOwner == userData.id);
-  } else if (userData.role === "admin") {
-    orders = ordersList;
-  } else {
-    orders = [];
-  }
 
   if (ordersTableBody.classList.contains("latest")) {
     orders = orders.slice(0, 10);
@@ -72,7 +95,7 @@ const renderTable = () => {
 };
 
 const showOrderDetails = (id) => {
-  const order = ordersList.find((o) => o.id == id);
+  const order = orders.find((o) => o.id == id);
   const modalProductsTableBody = document.getElementById(
     "modal_products_table_body"
   );
@@ -90,20 +113,18 @@ const showOrderDetails = (id) => {
   <th>total price</th>
     
   `;
+
   order.products.forEach((product) => {
+    const productPrice = Number(product.totalPrice) / Number(product.count);
     const row = document.createElement("tr");
     row.innerHTML = `
-              ${
-                userData.role === "admin"
-                  ? `<td>${product.product.seller.name}</td>`
-                  : ""
-              }
+    ${
+      userData.role === "admin" ? `<td>${product.product.seller.name}</td>` : ""
+    }
               <td>${product.product.name}</td>
-              <td>${product.product.price} EGP</td>
+              <td>${productPrice} EGP</td>
               <td>${product.count}</td>
-              <td>${
-                Number(product.product.price) * Number(product.count)
-              } EGP</td>
+              <td>${product.totalPrice} EGP</td>
             `;
     modalProductsTableBody.appendChild(row);
   });
@@ -182,10 +203,28 @@ const changeOrderStatus = (orderId, status) => {
   const order = ordersList.find((o) => o.id == orderId);
   if (order) {
     order.orderStatus = status;
+    if (order.orderStatus == "canceled") {
+      order.products.forEach((el) => {
+        incrementRemovedProductQuantity(el.product.id, el.count);
+      });
+    }
+
     localStorage.setItem("ordersList", JSON.stringify(ordersList));
     renderTable();
   }
 };
+
+function incrementRemovedProductQuantity(productId, count) {
+  const updatedProductsList =
+    JSON.parse(localStorage.getItem("productsList")) || [];
+  const productIndex = updatedProductsList.findIndex(
+    (product) => product.id == productId
+  );
+  if (productIndex !== -1) {
+    updatedProductsList[productIndex].quantity += count;
+    localStorage.setItem("productsList", JSON.stringify(updatedProductsList));
+  }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   renderTable();

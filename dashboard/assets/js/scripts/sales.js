@@ -3,7 +3,27 @@ const ordersList = JSON.parse(localStorage.getItem("ordersList")) || [];
 
 let orders;
 if (userData.role === "seller") {
-  orders = ordersList.filter((el) => el.orderOwner == userData.id);
+  orders = ordersList
+    .map((order) => {
+      const sellerProducts = order.products.filter(
+        (product) => product.product.seller.id === userData.id
+      );
+
+      if (sellerProducts.length > 0) {
+        return {
+          ...order,
+          products: sellerProducts,
+          totalOrderPrice: sellerProducts.reduce(
+            (acc, item) => acc + item.totalPrice,
+            0
+          ),
+        };
+      } else {
+        return null;
+      }
+    })
+    .filter((order) => order !== null);
+    
 } else if (userData.role === "admin") {
   orders = ordersList;
 } else {
@@ -92,26 +112,69 @@ const ctxPie = document.getElementById("pieChart").getContext("2d");
 
 const barChart = new Chart(ctxBar, {
   type: "bar",
-  data: chartData.barChart,
+  data: {
+    labels: ["Total Sales", "Total Orders", "Average Order Value"],
+    datasets: [
+      {
+        label: "Total Sales",
+        data: [salesAnalytics.totalSales, null, null],
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Total Orders",
+        data: [null, salesAnalytics.totalOrders, null],
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
+        yAxisID: "y1",
+      },
+      {
+        label: "Average Order Value",
+        data: [null, null, salesAnalytics.averageOrderValue],
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
+      },
+    ],
+  },
   options: {
     responsive: true,
     scales: {
       y: {
-        beginAtZero: true
-      }
+        beginAtZero: true,
+        type: "linear",
+        position: "left",
+      },
+      y1: {
+        beginAtZero: true,
+        type: "linear",
+        position: "right",
+        grid: {
+          drawOnChartArea: false, // grid lines for one axis to show up
+        },
+        ticks: {
+          stepSize: 1,
+          callback: function (value) {
+            if (Number.isInteger(value)) {
+              return value;
+            }
+          },
+        },
+      },
     },
     plugins: {
       legend: {
-        display: false 
+        display: true,
       },
       title: {
         display: true,
-        text: 'Sales Analytics'
-      }
-    }
-  }
+        text: "Sales Analytics",
+      },
+    },
+  },
 });
-
 
 const pieChart = new Chart(ctxPie, {
   type: "pie",

@@ -118,7 +118,7 @@
                     tbody = document.getElementsByTagName("tbody")[0];
                     creat_tdimg = document.createElement("td");
                     products.forEach(obj => {
-                        const currentQty = productsList.find(el => el.id == obj.id ).quantity = 1 ;
+                        const currentQty = 1 ;
                         var creat_tr = document.createElement("tr");
                         let values = Object.values(obj);
                         for (let i = 0; i < values.length; i++) {
@@ -302,22 +302,6 @@
                     let section1 = document.getElementById("sec1");
                     section1.style.display = "block";
                 }; //end of validate length of Products in cart
-                // var products1 = [{
-                //     id: 1,
-                //     img: "pic/198982_1665262072.webp",
-                //     name: "cap",
-                //     price: 50
-                // }, {
-                //     id: 2,
-                //     img: "pic/free-latest-ny-baseball-cap-highever-original-imagnm8yxxvmhmdy.webp",
-                //     name: "cap2",
-                //     price: 100
-                // }, {
-                //     id: 3,
-                //     img: "pic/hats-caps-printing.jpg",
-                //     name: "cap3",
-                //     price: 150
-                // }];
             }; //end of validate user id
 
         

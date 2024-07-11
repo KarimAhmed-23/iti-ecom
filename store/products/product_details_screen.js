@@ -42,6 +42,10 @@ function handleIfAuthenticatedUser(userId) {
     return;
   }
 
+  const discountedPrice = productToAdd.discount
+    ? productToAdd.price - (productToAdd.price * (productToAdd.discount / 100))
+    : productToAdd.price;
+
   const cartIndex = cartList.findIndex((cart) => cart.cartOwner === userId);
 
   if (cartIndex === -1) {
@@ -50,12 +54,12 @@ function handleIfAuthenticatedUser(userId) {
         ? Math.max(...cartList.map((el) => parseInt(el.id))) + 1
         : 1,
       cartOwner: userId,
-      totalCartPrice: productToAdd.price * 1,
+      totalCartPrice: discountedPrice,
       products: [
         {
           count: 1,
           product: productToAdd,
-          totalPrice: productToAdd.price * 1,
+          totalPrice: discountedPrice,
         },
       ],
     };
@@ -74,9 +78,9 @@ function handleIfAuthenticatedUser(userId) {
       userCart.products.push({
         count: 1,
         product: productToAdd,
-        totalPrice: productToAdd.price * 1,
+        totalPrice: discountedPrice,
       });
-      userCart.totalCartPrice += productToAdd.price * 1;
+      userCart.totalCartPrice += discountedPrice;
       cartList[cartIndex] = userCart;
       localStorage.setItem("cartList", JSON.stringify(cartList));
 
