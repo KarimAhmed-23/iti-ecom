@@ -155,6 +155,6 @@ function generateFilters() {
       </label>
     `;
     filterCheckbox.querySelector("input").addEventListener("change", filterProducts);
-    filtersContainer.appendChild(filterCheckbox);
+    filtersContainer?.appendChild(filterCheckbox);
   });
 }
